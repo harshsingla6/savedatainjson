@@ -3,7 +3,7 @@ const express = require("express")
 const fs = require("fs")
 const bodyparser = require("body-parser")
 // const uuid = require("uuid/dist/v4")
-const {v4: uuidv4 } = require("uuid")
+// const {v4: uuidv4 } = require("uuid")
 const app = express();
 
 app.use(bodyparser.json());
@@ -104,7 +104,6 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const employee = {
-    id : uuidv4(),
     name: req.body.name,
     age: req.body.age,
     language: req.body.language,
@@ -114,24 +113,46 @@ app.post("/", (req, res) => {
 });
 
 
+// 
 app.put("/:id", (req, res) => {
   const id = req.params.id;
-  const newEmployee = {
-      name: req.body.name,
-      age: req.body.age,
-      language: req.body.language
-  }
-  employees = employees.map(employee => {
-      if(employee.id === id){
-          employee.name = newEmployee.name;
-          employee.age = newEmployee.age;
-          employee.language = newEmployee.language;
-          return employee;
-      }
-      else {
-          return employee;
-      }
-    })
-    res.send(employees)
-    console.log(employees)
+  const {name, age, language} = req.body;
+   
+  employees = employees.map((employee, index) => {
+    if(index + 1 === parseInt(id)){
+      return {
+        name: name || employee.name,
+        age: age || employee.age,
+        language: language || employee.language
+      }        
+    }
+    else {
+      return employee;
+    }
   })
+  res.json(employees);
+});
+
+
+//   app.delete("/:id",(req,res,next)=>{
+//     const id = req.params.id;
+//     employees= remove(id)
+//     .then(result =>{
+//      res.status(200).json(result)
+//     })
+//     .catch(err=> {
+//         console.log(err);
+//         res.status(500),json({
+//             error:err
+//         })
+//     })
+    
+// })
+
+app.delete("/:id", (req, res) => {
+  const id = req.params.id;
+
+  employees = employees.filter(( _ , index) => index + 1 !== parseInt(id));
+
+  res.json(employees);
+})
