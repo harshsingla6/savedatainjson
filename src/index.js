@@ -1,6 +1,8 @@
 const express = require("express")
+// const webpack = require("webpack")
+// const webpackcli = require("webpack-cli")
 // const mysql = require ("mysql")
-const fs = require("fs")
+// const fs = require("fs")
 const bodyparser = require("body-parser")
 // const uuid = require("uuid/dist/v4")
 // const {v4: uuidv4 } = require("uuid")
@@ -104,6 +106,7 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
   const employee = {
+    id: req.body.id,
     name: req.body.name,
     age: req.body.age,
     language: req.body.language,
@@ -112,14 +115,13 @@ app.post("/", (req, res) => {
   res.json(employees);
 });
 
-
-// 
+ 
 app.put("/:id", (req, res) => {
   const id = req.params.id;
-  const {name, age, language} = req.body;
+  const { id,name, age, language} = req.body;
    
-  employees = employees.map((employee, index) => {
-    if(index + 1 === parseInt(id)){
+//   employees = employees.map((employee, index) => {
+    if(id  === parseInt(id)){
       return {
         name: name || employee.name,
         age: age || employee.age,
@@ -129,8 +131,8 @@ app.put("/:id", (req, res) => {
     else {
       return employee;
     }
-  })
-  res.json(employees);
+//   })
+      res.json(employees);
 });
 
 
@@ -153,6 +155,5 @@ app.delete("/:id", (req, res) => {
   const id = req.params.id;
 
   employees = employees.filter(( _ , index) => index + 1 !== parseInt(id));
-
   res.json(employees);
 })
